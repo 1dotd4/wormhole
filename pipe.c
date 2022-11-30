@@ -16,17 +16,23 @@
 
 uint8_t roundKey[NR_ROUNDS+1][WORDS_IN_KEY][BYTES_IN_WORD];
 uint8_t Key[WORDS_IN_KEY][BYTES_IN_WORD];
- uint8_t vec[BLOCK_SIZE];
+uint8_t vec[BLOCK_SIZE];
+char fileNameIn[20];
+char fileNameOut[20];
+int id;
+uint8_t buf[17];
+
 
 int main(int argc, char *argv[]) {
-	char fileNameIn[20];
-	char fileNameOut[20];
-	int id = 0;
-	uint8_t buf[16];
-	/* Using
+		/* Using
 	 * mkfifo Java2C000
 	 * mkfifo C2Java000
 	 */
+	if(argc==1){
+		id = 0;
+  	} else { 
+    		id=atoi(argv[1]);
+	}
 	sprintf(fileNameIn ,"Java2C%03d", id);
     	sprintf(fileNameOut,"C2Java%03d", id); 
 	int fpIn;
