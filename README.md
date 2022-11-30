@@ -49,6 +49,18 @@ In questo caso la pipe di lettura è settata a `4[chunk_decrypted]`
 
 Nello specifico, questo modulo tiene in memoria la chiave e l'IV impostati e li aggiorna rispettivamente quando richiesto e quando viene cifrato/decifrato un blocco.
 
+### Come eseguire C
+
+### Come eseguire C
+Eseguire il comando `./pipe id` per creare una pipe e un programma in ascolto.
+A questo punto basta eseguire in java:
+
+```
+pipe_in.pipe_set(id); // per settare la pipe
+pipe_in.write_read(buf); // ogni volta che voglio scirvere e eseguire 17 byte
+```
+
+
 ## Client
 
 Il client e' un'interfaccia grafica che, dopo aver inserito la chiave di sessione, permette di effettuare drag-and-drop di file.
