@@ -1,3 +1,11 @@
+JAVAHOME=/opt/java/current
+JAVAOPT=-d bin
+
+bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertController.java
+	${JAVAHOME}/bin/javac ${JAVAOPT} src/client/insertController.java
+	${JAVAHOME}/bin/javac ${JAVAOPT} src/client/ClientLauncher.java
+	cp -r src/client/res bin/
+
 all: AES.Lib.o pipe pipe_in.class AESTest
 
 AES.Lib.o : AES.Lib.c AES.Lib.h
