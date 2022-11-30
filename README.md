@@ -38,10 +38,14 @@ Si intende realizzare le interfacce grafiche in JavaFX con fxml.
 Questo implementa sia le funzioni di cifratura che decifratura che vanno impostati correttamente.
 
 Il protocollo permette le seguenti funzioni che vengono comunicate con un byte per il codice e i restanti sono fissi.
-- `3[key_to_set]`: imposta la chiave per cifrare e decifrare i blocchi;
-- `2[iv_to_set]`: imposta l'initial vector da utilizzare per cifrare i vari blocchi;
-- `1[chunk_to_encrypt]`: cifra un chunk di lunghezza 16byte;
-- `0[chuck_to_decrypt]`: decifra un chunk.
+- `3[key_to_set]`: imposta la chiave per cifrare e decifrare i blocchi;  
+In questo caso la pipe di lettura è settata a `43333333333333333`
+- `2[iv_to_set]`: imposta l'initial vector da utilizzare per cifrare i vari blocchi;  
+In questo caso la pipe di lettura è settata a `42222222222222222`
+- `1[chunk_to_encrypt]`: cifra un chunk di lunghezza 16byte;  
+In questo caso la pipe di lettura è settata a `4[chunk_encrypted]`
+- `0[chuck_to_decrypt]`: decifra un chunk.  
+In questo caso la pipe di lettura è settata a `4[chunk_decrypted]`
 
 Nello specifico, questo modulo tiene in memoria la chiave e l'IV impostati e li aggiorna rispettivamente quando richiesto e quando viene cifrato/decifrato un blocco.
 
