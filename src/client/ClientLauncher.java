@@ -16,7 +16,7 @@ public class ClientLauncher extends Application {
         
         stage.setTitle("wormhole");
 	//        stage.setScene(new Scene(root, Settings.maxPixel, Settings.maxPixel));
-        stage.setScene(new Scene(root,1024,768));
+        stage.setScene(new Scene(root,512,256));
         stage.show();
 	
     }

@@ -40,26 +40,19 @@ import javafx.scene.Parent;
 
 
 public class insertController {
-    @FXML private javafx.scene.control.Button submitButton;
+    @FXML private Button submitButton;
     @FXML private Label statusLabel;
     @FXML private ProgressBar progressBar;
-
-    // @FXML private TextField programField;
-    // @FXML private TextArea outputField;
-    // @FXML private TextArea errorField;
-    // @FXML private Text actiontarget;
-    
 
     @FXML protected void chooseFileToUpload(ActionEvent event) throws Exception {
       FileChooser fileChooserPane = new FileChooser();
       fileChooserPane.setTitle("Choose file to upload.");
       File chosenFile = fileChooserPane.showOpenDialog(statusLabel.getScene().getWindow());
-
       if (chosenFile == null) {
         return;
       }
 
-      // TODO: disable button and enable status
+      submitButton.setDisable(true);
       FileUploadController controller = new FileUploadController(chosenFile, statusLabel);
       if (!controller.start()) {
         // signal error
@@ -70,82 +63,6 @@ public class insertController {
         alertStage.setAlwaysOnTop(true);
         a.showAndWait();
       }
-      // TODO: enable button and disable status
-
+      submitButton.setDisable(false);
     }
-
-    /* 
-       @FXML protected void handleSubmitButtonAction(ActionEvent event) throws Exception {
-
-       String  progname=programField.getText();
-       String prgarr[]=progname.split(" ");
-       List<String> commandList=new ArrayList<String>();
-
-       for(int i=0;i<prgarr.length;i++)
-       commandList.add(prgarr[i]);
-
-       try {
-
-    // Crea il process builder che lancerà l'eseguibile esterno ed i suoi parametri nella lista
-    ProcessBuilder pb = new ProcessBuilder(commandList);
-    //Esegue pb. final perchè la variabile non può essere riassegnata ad un processo diverso.
-    final Process p=pb.start();
-
-
-    // Leggo l'output stdin e stderr dell'eseguibile e li metto in br e bre, rispettivamente.
-
-    // https://www.tutorialspoint.com/java/lang/processbuilder_command_list.htm
-    BufferedReader br=new BufferedReader(new InputStreamReader(p.getInputStream()));
-    String BufLine="";
-    String line;
-    while((line=br.readLine())!=null){
-    BufLine=BufLine+line+"\n";
-    }
-    // Con il seguente metto il buffer nel campo della form in JavaFX
-    outputField.setText(BufLine);
-    // Analogamente faccio per bre
-    BufferedReader bre=new BufferedReader(new InputStreamReader(p.getErrorStream()));
-    BufLine="";
-    while((line=bre.readLine())!=null){
-    BufLine=BufLine+line+"\n";
-    }
-
-    errorField.setText(BufLine);
-    //
-
-
-
-
-    } catch (Exception ex) {
-    // Se c'è qualche errore java lo metto su errorField.
-    StringWriter sw = new StringWriter();
-    PrintWriter pw = new PrintWriter(sw);
-    ex.printStackTrace(pw);
-    sw.toString();
-    outputField.setText("");
-    errorField.setText(sw.toString());
-    //	    System.out.println(ex);
-    }
-
-
-    //stage.close();
-
-
-
-
-       }
-       */
-
 }
-
-/*
-@FXML private javafx.scene.control.Button closeButton;
-
-@FXML
-private void closeButtonAction(){
-    // get a handle to the stage
-    Stage stage = (Stage) closeButton.getScene().getWindow();
-    // do what you have to do
-    stage.close();
-}
-*/

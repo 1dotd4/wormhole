@@ -73,8 +73,8 @@ Ci si aspetta che il client utilizzi la stessa chiave per cifrare il file.
 Il server si aspetta che il client comunichi seguendo il seguente flusso.
 
 - Scelto il file, il Client si collega e invia `Hello there`.
-- Il Server risponde `Jeneral Kenobi`.
-- Il Client una volta scelto il file inviera' il comando `U:foo.txt:123` (32 byte al massimo in chiaro) dove `foo.txt` (quanti byte mi aspetto?) e' il file che si intende caricare e `123` (2 byte) sono i byte da trasferire.
+- Il Server risponde `General Kenobi`.
+- Il Client una volta scelto il file inviera' il comando `U:foo.txt:123:` (32 byte al massimo in chiaro) dove `foo.txt` (quanti byte mi aspetto?) e' il file che si intende caricare e `123` (2 byte) sono i byte da trasferire.
 - Il Server risponde con `NO` se il file esiste gia' o se e' troppo grande, altrimenti `OK`.
 - Il Client inizia a trasferire i byte e il Server li riceve.
 - Il Client e il Server, una volta inviati e ricevuti i byte indicati, rispettivamente, chiudono il socket e viene reimpostato l'IV di default.
