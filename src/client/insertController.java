@@ -2,8 +2,6 @@ import java.io.StringWriter;
 import java.io.PrintWriter;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import java.util.ArrayList; 
 import java.util.List;
@@ -61,16 +59,19 @@ public class insertController {
         return;
       }
 
+      // TODO: disable button and enable status
+      FileUploadController controller = new FileUploadController(chosenFile, statusLabel);
+      if (!controller.start()) {
+        // signal error
+        Alert a = new Alert(AlertType.INFORMATION);
+        a.setContentText(String.format("Couldn't upload file \"%s\".", chosenFile.getName()));
+        Stage alertStage = (Stage) a.getDialogPane().getScene().getWindow();
+        alertStage.initModality(Modality.APPLICATION_MODAL);
+        alertStage.setAlwaysOnTop(true);
+        a.showAndWait();
+      }
+      // TODO: enable button and disable status
 
-      byte[] data = Files.readAllBytes(Paths.get(chosenFile.getPath()));
-      Alert a = new Alert(AlertType.INFORMATION);
-      // a.setContentText(chosenFile.getName());
-      // a.setContentText(chosenFile.getPath());
-      a.setContentText(String.format("%02X", data[0]));
-      Stage alertStage = (Stage) a.getDialogPane().getScene().getWindow();
-      alertStage.initModality(Modality.APPLICATION_MODAL);
-      alertStage.setAlwaysOnTop(true);
-      a.showAndWait();
     }
 
     /* 
