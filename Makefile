@@ -1,9 +1,11 @@
 JAVAHOME=/opt/java/current
 JAVAOPT=-d bin -sourcepath
+COPT=-W -Wall -Wextra -g -O0
 
-all: bin/ClientLauncher.class bin/WormholeServer.class
+all: bin/ClientLauncher.class bin/WormholeServer.class bin/pipe bin/AESTest
 
 bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertController.java src/client/FileUploadController.java
+	mkdir -p bin
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/insertController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/ClientLauncher.java
 	cp -r src/client/res bin/
@@ -11,18 +13,20 @@ bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertContro
 bin/WormholeServer.class: src/server/WormholeServer.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/server src/server/WormholeServer.java
 
-# all: AES.Lib.o pipe pipe_in.class AESTest
+bin/pipe: src/C_AES/pipe.c obj/AES.Lib.o
+	mkdir -p bin
+	gcc ${COPT} src/C_AES/pipe.c -o bin/pipe obj/AES.Lib.o
 
-AES.Lib.o : AES.Lib.c AES.Lib.h
-	gcc -c AES.Lib.c
+bin/AESTest: src/C_AES/AESTest.c obj/AES.Lib.o
+	mkdir -p bin
+	gcc ${COPT} src/C_AES/AESTest.c -o bin/AESTest obj/AES.Lib.o
 
-pipe: pipe.c AES.Lib.o
-	gcc pipe.c -o pipe AES.Lib.o
+obj/AES.Lib.o : src/C_AES/AES.Lib.c src/C_AES/AES.Lib.h
+	mkdir -p obj/
+	gcc ${COPT} -c src/C_AES/AES.Lib.c -o obj/AES.Lib.o
 
-pipe_in.class: pipe_in.java
-	javac pipe_in.java
 
-AESTest: AESTest.c AES.Lib.o
-	gcc AESTest.c -o AESTest AES.Lib.o
+#bin/pipe_in.class: pipe_in.java
+#	javac src/C_AES/pipe_in.java
 
 .PHONY: all
