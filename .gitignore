@@ -7,4 +7,5 @@
 *.class
 *.o
 bin
+uploaded/
 

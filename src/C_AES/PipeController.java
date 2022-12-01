@@ -29,7 +29,7 @@ public class PipeController {
     try {
       out.write(buf);
       for(int i = 0; i < 17; i++) {
-        buf[i]=(byte)in.read();
+        buf[i] = (byte)in.read();
       }
     } catch (Exception ex){
       System.out.println(ex);

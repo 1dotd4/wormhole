@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
 
 import java.net.Socket;
 import java.net.ServerSocket;
@@ -66,14 +67,32 @@ public class WormholeServer {
                 state++;
                 break;
               case 4:
-                System.out.println(String.format("%s: %d", fileName, fileSize));
+                FileOutputStream fileOut = new FileOutputStream("uploaded/" + fileName);
+                int byteRead = 0;
+                // while (byteRead < (fileSize + 8) / 8) {
+                while (byteRead < fileSize) {
+                  int subByteRead = 0;
+                  byte[] tempBuf = new byte[16]; 
+                  while (subByteRead < 16) {
+                    int whatIveRead = inStream.read(tempBuf, subByteRead,  16 - subByteRead);
+                    if (whatIveRead >= 0){
+                      subByteRead += whatIveRead;
+                    }
+                  }
+                  byteRead += subByteRead;
+                  System.out.println(String.format("Received %d%%. (%d bytes)", (byteRead * 100 / fileSize), byteRead));
+                  // decrifra
+                  // scrivi file
+                  fileOut.write(tempBuf);
+                }
+                fileOut.close();
+                System.out.println(String.format("File received: %s (%d bytes).", fileName, fileSize));
                 state++;
                 break;
               default:
                 shouldContinue = false;
                 break;
             }
-
           }
         } catch (IOException e) {
 

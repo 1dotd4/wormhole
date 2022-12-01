@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileInputStream;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,7 +23,8 @@ public class FileUploadController {
 
   public boolean start() {
     try {
-      byte[] data = Files.readAllBytes(Paths.get(this.fileToUpload.getPath()));
+      // byte[] data = Files.readAllBytes(Paths.get(this.fileToUpload.getPath()));
+      FileInputStream fileIn = new FileInputStream(this.fileToUpload);
       // TODO: pigliare sto indirizzo da qualche parte
       Socket sock = new Socket("127.0.0.1", 31337);
       DataOutputStream outStream = new DataOutputStream(sock.getOutputStream());
@@ -65,12 +67,28 @@ public class FileUploadController {
               System.out.println("Got No");
               break;
             }
-            System.out.println("Got Okay");
+            // System.out.println("Got Okay");
+            this.lableToUpdate.setText("Got Okay");
             state++;
             break;
-          // case 5:
-          //   break;
+          case 5:
+            byte[] tmpBuf = new byte[16];
+            int byteWrote = 0;
+            // while (byteWrote < (this.fileToUpload.length() + 8) / 8) {
+            while (byteWrote < this.fileToUpload.length()) {
+              byteWrote += fileIn.read(tmpBuf);
+              // cifra
+              outStream.write(tmpBuf);
+              this.lableToUpdate.setText(
+                  String.format("Uploading... %d%%",
+                  (byteWrote * 100 / this.fileToUpload.length())));
+            }
+            outStream.close();
+            state++;
+            break;
           default:
+            // System.out.println("File uploeded.");
+            this.lableToUpdate.setText("File uploaded.");
             shouldContinue = false;
             break;
         }
