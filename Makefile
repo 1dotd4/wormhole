@@ -37,6 +37,7 @@ bin/AESTest: src/C_AES/AESTest.c obj/AES.Lib.o
 	gcc ${COPT} src/C_AES/AESTest.c -o bin/AESTest obj/AES.Lib.o
 
 obj/AES.Lib.o : src/C_AES/AES.Lib.c src/C_AES/AES.Lib.h
+	mkdir -p bin
 	mkdir -p obj/
 	gcc ${COPT} -c src/C_AES/AES.Lib.c -o obj/AES.Lib.o
 
