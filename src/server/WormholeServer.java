@@ -81,7 +81,7 @@ public class WormholeServer {
                 FileOutputStream fileOut = new FileOutputStream("uploaded/" + fileName);
                 int byteRead = 0;
                 // while (byteRead < fileSize) {
-                while (byteRead < fileSize + (fileSize + 16) % 16) {
+                while (byteRead < 16 * ((fileSize + 15) / 16)) {
                   int subByteRead = 0;
                   byte[] tempBuf = new byte[16]; 
                   while (subByteRead < 16) {

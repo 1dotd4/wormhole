@@ -83,7 +83,8 @@ public class FileUploadController {
           case 5:
             byte[] tmpBuf = new byte[16];
             int byteWrote = 0;
-            while (byteWrote < this.fileToUpload.length() + (this.fileToUpload.length() + 16) % 16) {
+
+            while (byteWrote < ((this.fileToUpload.length() + 15) / 16) * 16) {
             // while (byteWrote < this.fileToUpload.length()) {
               byteWrote += fileIn.read(tmpBuf);
               if (byteWrote >= this.fileToUpload.length()) { // - (this.fileToUpload.length() % 16)) {
