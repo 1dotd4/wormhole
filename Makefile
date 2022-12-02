@@ -12,9 +12,12 @@ bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertContro
 	mkdir -p bin
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/insertController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/ClientLauncher.java
+	mkfifo client_in client_out
 	cp -r src/client/res bin/
 
 bin/WormholeServer.class: src/server/WormholeServer.java src/server/PipeController.java
+	mkdir -p uploaded/
+	mkfifo server_in server_out
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/server src/server/WormholeServer.java
 
 bin/PipeController.class: src/C_AES/PipeController.java
@@ -34,8 +37,5 @@ obj/AES.Lib.o : src/C_AES/AES.Lib.c src/C_AES/AES.Lib.h
 	mkdir -p obj/
 	gcc ${COPT} -c src/C_AES/AES.Lib.c -o obj/AES.Lib.o
 
-
-#bin/pipe_in.class: pipe_in.java
-#	javac src/C_AES/pipe_in.java
 
 .PHONY: all
