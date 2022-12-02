@@ -22,6 +22,7 @@ bin/WormholeServer.class: src/server/WormholeServer.java src/server/PipeControll
 
 bin/PipeController.class: src/C_AES/PipeController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/C_AES src/C_AES/PipeController.java
+	mkfifo test_in test_out
 	cp src/C_AES/PipeController.java src/client/
 	cp src/C_AES/PipeController.java src/server/
 
