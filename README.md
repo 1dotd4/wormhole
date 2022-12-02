@@ -2,6 +2,27 @@ wormhole - file transfer
 
 # Utilizzo
 
+Per utilizzare il progetto per prima cosa bisogna modificare la prima riga del `Makefile` in modo tale che punti alla directory di java corretta:
+
+```
+JAVAHOME=/directory/corretta
+```
+
+e eseguire `make`. Dopo questo bisogna generare la key e l'initial vector con openssl:
+
+```
+openssl rand 16 > key
+openssl rand 16 > iv
+```
+
+e si può procedere a lanciare il server e il client (in due terminali diversi)usando `./scripts/run_server.sh` per il server e `./scripts/run_client.sh` per il client.
+
+A questo punto per il client si aprirà una finestra con un pulsante da utilizzare per selezionare un file da caricare. Il file si troverà all'interndo della cartella `uploaded`.
+
+
+### Considerazioni e bug
+Abbiamo per ora un piccolo problema nel caso in cui l'ultimo pacchetto sia lungo 15 byte, dovuto al padding. In questo caso tutto procede correttamente, ma alla fine si apre un popup che indica l'errore (anche se il file si trova correttamente nella cartella uploaded).
+
 # Analisi dei requisiti
 
 Si intende realizzare un semplice file transfer tra computer.
