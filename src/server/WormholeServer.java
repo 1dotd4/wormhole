@@ -69,8 +69,8 @@ public class WormholeServer {
               case 4:
                 FileOutputStream fileOut = new FileOutputStream("uploaded/" + fileName);
                 int byteRead = 0;
-                // while (byteRead < (fileSize + 8) / 8) {
-                while (byteRead < fileSize) {
+                // while (byteRead < fileSize) {
+                while (byteRead < fileSize + (fileSize + 16) % 16) {
                   int subByteRead = 0;
                   byte[] tempBuf = new byte[16]; 
                   while (subByteRead < 16) {
@@ -80,10 +80,18 @@ public class WormholeServer {
                     }
                   }
                   byteRead += subByteRead;
-                  System.out.println(String.format("Received %d%%. (%d bytes)", (byteRead * 100 / fileSize), byteRead));
+                  System.out.println(
+                      String.format("Received %d%%. (%d bytes)",
+                        (byteRead * 100 / fileSize), byteRead));
                   // decrifra
-                  // scrivi file
-                  fileOut.write(tempBuf);
+                  // unpad here
+                  if (byteRead > fileSize) {
+                    System.out.println("Writing last bytes.");
+                    fileOut.write(tempBuf, 0, fileSize % 16);
+                  } else {
+                    // scrivi file
+                    fileOut.write(tempBuf);
+                  }
                 }
                 fileOut.close();
                 System.out.println(String.format("File received: %s (%d bytes).", fileName, fileSize));

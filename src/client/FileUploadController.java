@@ -74,9 +74,24 @@ public class FileUploadController {
           case 5:
             byte[] tmpBuf = new byte[16];
             int byteWrote = 0;
-            // while (byteWrote < (this.fileToUpload.length() + 8) / 8) {
-            while (byteWrote < this.fileToUpload.length()) {
+            while (byteWrote < this.fileToUpload.length() + (this.fileToUpload.length() + 16) % 16) {
+            // while (byteWrote < this.fileToUpload.length()) {
               byteWrote += fileIn.read(tmpBuf);
+              if (byteWrote >= this.fileToUpload.length()) { // - (this.fileToUpload.length() % 16)) {
+                // Last block
+                // Here we pad so we can encrypt correctly the message.
+                System.out.println(
+                    String.format(
+                      "Should write last %d bytes...",
+                      (this.fileToUpload.length() % 16)));
+                int off = (int)(this.fileToUpload.length()) % 16;
+                int bytesToPad = 16 - off;
+                for (int i = 0; i < bytesToPad; i++) {
+                  tmpBuf[off + i] = (byte) bytesToPad;
+                }
+
+                byteWrote += bytesToPad;
+              }
               // cifra
               outStream.write(tmpBuf);
               this.lableToUpdate.setText(
@@ -99,6 +114,7 @@ public class FileUploadController {
       sock.close();
       // do stuff
     } catch (IOException e) {
+      System.out.println(e);
       return false;
     }
     return true; // false if error
