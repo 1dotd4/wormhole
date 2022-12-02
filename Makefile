@@ -2,7 +2,7 @@ JAVAHOME=/opt/java/current
 JAVAOPT=-d bin -sourcepath
 COPT=-W -Wall -Wextra -g -O0
 
-all: bin/ClientLauncher.class bin/WormholeServer.class bin/pipe bin/AESTest
+all: bin/ClientLauncher.class bin/WormholeServer.class bin/C_AES bin/AESTest
 
 bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertController.java src/client/FileUploadController.java
 	mkdir -p bin
@@ -13,9 +13,12 @@ bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertContro
 bin/WormholeServer.class: src/server/WormholeServer.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/server src/server/WormholeServer.java
 
-bin/pipe: src/C_AES/pipe.c obj/AES.Lib.o
+bin/PipeController.class: src/server/PipeController.java
+	${JAVAHOME}/bin/javac ${JAVAOPT} src/C_AES src/C_AES/PipeController.java
+
+bin/C_AES: src/C_AES/pipe.c obj/AES.Lib.o
 	mkdir -p bin
-	gcc ${COPT} src/C_AES/pipe.c -o bin/pipe obj/AES.Lib.o
+	gcc ${COPT} src/C_AES/pipe.c -o bin/C_AES obj/AES.Lib.o
 
 bin/AESTest: src/C_AES/AESTest.c obj/AES.Lib.o
 	mkdir -p bin

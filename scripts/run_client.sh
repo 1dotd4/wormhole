@@ -12,7 +12,7 @@ finished() {
   wait
 }
 
-# ./bin/C_AES client &
+./bin/C_AES client &
 # catch the background process
 
 java -classpath ./bin ClientLauncher

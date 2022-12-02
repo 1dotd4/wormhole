@@ -23,17 +23,26 @@ public class FileUploadController {
 
   public boolean start() {
     try {
-      // byte[] data = Files.readAllBytes(Paths.get(this.fileToUpload.getPath()));
+      // File stream
       FileInputStream fileIn = new FileInputStream(this.fileToUpload);
+      // Socket connection
       // TODO: pigliare sto indirizzo da qualche parte
       Socket sock = new Socket("127.0.0.1", 31337);
       DataOutputStream outStream = new DataOutputStream(sock.getOutputStream());
       DataInputStream inStream = new DataInputStream(sock.getInputStream());
-      // read write byte here
+      System.out.println("Connected");
+      System.out.flush();
+      // Encryption module
+      byte[] key = Files.readAllBytes(Paths.get("key"));
+      byte[] iv = Files.readAllBytes(Paths.get("iv"));
+      PipeController encryptionModule = new PipeController("client");
+      encryptionModule.set_key(key);
+      encryptionModule.set_vec(iv);
+      System.out.println("Encryption module is ready");
+      // Protocol stuff
       boolean shouldContinue = true;
       int state = 1;
       String s;
-      System.out.println("Connected");
       while (shouldContinue) {
         switch (state) {
           case 1:
@@ -93,6 +102,7 @@ public class FileUploadController {
                 byteWrote += bytesToPad;
               }
               // cifra
+              encryptionModule.encrypt(tmpBuf);
               outStream.write(tmpBuf);
               this.lableToUpdate.setText(
                   String.format("Uploading... %d%%",

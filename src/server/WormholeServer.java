@@ -4,6 +4,9 @@ import java.io.DataOutputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import java.net.Socket;
 import java.net.ServerSocket;
 
@@ -12,17 +15,25 @@ public class WormholeServer {
     try {
       ServerSocket servSock = new ServerSocket(31337);
       while (true) {
+        // Socket connection
         Socket sock = servSock.accept();
         DataOutputStream outStream = new DataOutputStream(sock.getOutputStream());
         DataInputStream inStream = new DataInputStream(sock.getInputStream());
-        // BufferedReader inReader = new DataOutputStream(inStream);
-        // read write byte here
+        System.out.println("Connected");
+        System.out.flush();
+        // Encryption module
+        byte[] key = Files.readAllBytes(Paths.get("key"));
+        byte[] iv = Files.readAllBytes(Paths.get("iv"));
+        PipeController encryptionModule = new PipeController("server");
+        encryptionModule.set_key(key);
+        encryptionModule.set_vec(iv);
+        System.out.println("Encryption module is ready");
+        // Protocol stuff
         boolean shouldContinue = true;
         int state = 1;
         String s;
         String fileName = "";
         int fileSize = 0;
-        System.out.println("Connected");
         try {
           while (shouldContinue) {
             switch (state) {
@@ -84,6 +95,7 @@ public class WormholeServer {
                       String.format("Received %d%%. (%d bytes)",
                         (byteRead * 100 / fileSize), byteRead));
                   // decrifra
+                  encryptionModule.decrypt(tempBuf);
                   // unpad here
                   if (byteRead > fileSize) {
                     System.out.println("Writing last bytes.");
@@ -103,7 +115,7 @@ public class WormholeServer {
             }
           }
         } catch (IOException e) {
-
+          System.out.println(e);
         }
 
         outStream.close();

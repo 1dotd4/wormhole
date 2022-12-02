@@ -17,7 +17,7 @@
 
 
 int main(int argc, char *argv[]) {
-  if (argc != 1) {
+  if (argc != 2) {
     fprintf(stderr, "Usage: %s <pipe-prefix-name>", argv[0]);
     return -1;
   }
