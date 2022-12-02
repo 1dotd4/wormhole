@@ -1,4 +1,4 @@
-JAVAHOME=/opt/java/current
+JAVAHOME=/usr
 JAVAOPT=-d bin -sourcepath
 COPT=-W -Wall -Wextra -g -O0
 
@@ -17,10 +17,12 @@ bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertContro
 
 bin/WormholeServer.class: src/server/WormholeServer.java src/server/PipeController.java
 	mkdir -p uploaded/
+	mkdir -p bin
 	mkfifo server_in server_out
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/server src/server/WormholeServer.java
 
 bin/PipeController.class: src/C_AES/PipeController.java
+	mkdir -p bin
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/C_AES src/C_AES/PipeController.java
 	mkfifo test_in test_out
 	cp src/C_AES/PipeController.java src/client/
