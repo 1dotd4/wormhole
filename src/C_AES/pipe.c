@@ -41,6 +41,7 @@ int main(int argc, char *argv[]) {
   uint8_t roundKey[NR_ROUNDS+1][WORDS_IN_KEY][BYTES_IN_WORD];
   uint8_t Key[WORDS_IN_KEY][BYTES_IN_WORD];
   uint8_t vec[BLOCK_SIZE];
+  uint8_t vecd[BLOCK_SIZE];
   uint8_t buf[17];
   uint8_t *data;
 
@@ -59,11 +60,14 @@ int main(int argc, char *argv[]) {
     // printf("C in mode %d\n", mode);
     switch (mode) {
       case 0:
+	for(uint8_t i = 0; i < 16; i++) {
+	  vecd[i] = vec[i];
+	}
         for(uint8_t i = 0; i < 16; i++) {
           vec[i] = data[i];
         }
         decryptAES(data, roundKey);
-        CBC(data, vec);
+        CBC(data, vecd);
         write(fpOut, buf, 17);
       break;
     case 1:
