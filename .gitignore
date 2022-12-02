@@ -9,3 +9,5 @@
 bin
 uploaded/
 
+src/.DS_Store
+.DS_Store
