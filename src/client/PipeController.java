@@ -37,7 +37,7 @@ public class PipeController {
     for (int i = 0; i < 16; i++) {
       data[i] = buf[i + 1];
     }
-    return buf;
+    return data;
   }
 
   public byte[] decrypt(byte[] data) { return write_read(0, data); }
