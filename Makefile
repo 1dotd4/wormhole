@@ -2,19 +2,25 @@ JAVAHOME=/opt/java/current
 JAVAOPT=-d bin -sourcepath
 COPT=-W -Wall -Wextra -g -O0
 
-all: bin/ClientLauncher.class bin/WormholeServer.class bin/C_AES bin/AESTest
+all: \
+	bin/PipeController.class \
+	bin/ClientLauncher.class \
+	bin/WormholeServer.class \
+	bin/C_AES bin/AESTest
 
-bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertController.java src/client/FileUploadController.java
+bin/ClientLauncher.class: src/client/ClientLauncher.java src/client/insertController.java src/client/FileUploadController.java src/client/PipeController.java
 	mkdir -p bin
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/insertController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/client src/client/ClientLauncher.java
 	cp -r src/client/res bin/
 
-bin/WormholeServer.class: src/server/WormholeServer.java
+bin/WormholeServer.class: src/server/WormholeServer.java src/server/PipeController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/server src/server/WormholeServer.java
 
-bin/PipeController.class: src/server/PipeController.java
+bin/PipeController.class: src/C_AES/PipeController.java
 	${JAVAHOME}/bin/javac ${JAVAOPT} src/C_AES src/C_AES/PipeController.java
+	cp src/C_AES/PipeController.java src/client/
+	cp src/C_AES/PipeController.java src/server/
 
 bin/C_AES: src/C_AES/pipe.c obj/AES.Lib.o
 	mkdir -p bin
