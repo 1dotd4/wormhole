@@ -27,8 +27,16 @@ int main(int argc, char *argv[]) {
   char fileNameOut[20];
   sprintf(fileNameIn ,"%s_in", pipe_prefix);
   sprintf(fileNameOut,"%s_out", pipe_prefix); 
-  int fpIn = open(fileNameIn,O_RDONLY);
-  int fpOut = open(fileNameOut,O_WRONLY);
+  int fpOut;
+  if ((fpOut = open(fileNameOut, O_WRONLY)) < 0) {
+    fprintf(stderr, "Could not open %s", fileNameOut);
+    return -2;
+  }
+  int fpIn;
+  if ((fpIn = open(fileNameIn, O_RDONLY)) < 0) {
+    fprintf(stderr, "Could not open %s", fileNameIn);
+    return -2;
+  }
 
   uint8_t roundKey[NR_ROUNDS+1][WORDS_IN_KEY][BYTES_IN_WORD];
   uint8_t Key[WORDS_IN_KEY][BYTES_IN_WORD];
@@ -43,12 +51,12 @@ int main(int argc, char *argv[]) {
   // 2 - set IV
   // 3 - set key
   // 4 - exit
-  uint8_t mode = 5;
+  uint8_t mode = 5; // idle
   while (mode != 4) {
     read(fpIn, buf, 17);
     mode = (uint8_t) buf[0];
     data = buf + 1;
-    printf("C in mode %d\n", mode);
+    // printf("C in mode %d\n", mode);
     switch (mode) {
       case 0:
         for(uint8_t i = 0; i < 16; i++) {
@@ -86,6 +94,8 @@ int main(int argc, char *argv[]) {
     default:
       break;
     } // end switch
+    buf[0] = 5;
+    mode = 5;
   } // end while
 
   close(fpOut);

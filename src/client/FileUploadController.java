@@ -102,7 +102,7 @@ public class FileUploadController {
                 byteWrote += bytesToPad;
               }
               // cifra
-              encryptionModule.encrypt(tmpBuf);
+              tmpBuf = encryptionModule.encrypt(tmpBuf);
               outStream.write(tmpBuf);
               this.lableToUpdate.setText(
                   String.format("Uploading... %d%%",

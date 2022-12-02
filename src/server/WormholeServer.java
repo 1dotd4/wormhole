@@ -95,7 +95,7 @@ public class WormholeServer {
                       String.format("Received %d%%. (%d bytes)",
                         (byteRead * 100 / fileSize), byteRead));
                   // decrifra
-                  encryptionModule.decrypt(tempBuf);
+                  tempBuf = encryptionModule.decrypt(tempBuf);
                   // unpad here
                   if (byteRead > fileSize) {
                     System.out.println("Writing last bytes.");
